@@ -141,16 +141,16 @@ Widget::Widget(QWidget *parent)
     QPushButton *btn = new QPushButton;
     btn->setText("reload");
     btn->setFixedSize(100, 40);
-    btn->move(this->width()-100, this->height()-40);
+    btn->move(this->width()-100, this->height()-100);
     btn->setParent(this);
 
-//     connect(btn, &QPushButton::clicked, this, [=](){
-//         m_listWidget->clear();
-//         loadThumbnail();
-//     });
-//     connect(m_listWidget, &QListWidget::itemClicked, this, [=](){
-//         qDebug()<<"sdf";
-//     });
+    connect(btn, &QPushButton::clicked, this, &Widget::removeImg);
+
+    connect(m_listWidget, &QListWidget::itemClicked, this, [=](){
+        qDebug()<<"sdf";
+//        m_listWidget->hide();
+//        displayImg(m_listWidget->currentItem());
+    });
 }
 
 Widget::~Widget()
@@ -179,7 +179,7 @@ bool Widget::initImgDir(QString imgDir)
     QDir Dir;
     if(imgDir.isEmpty())
     {
-        m_imgDir = QCoreApplication::applicationDirPath() + "/img/";
+        m_imgDir = QCoreApplication::applicationDirPath() + "/img";
         Dir.mkdir(m_imgDir);
         qDebug()<<__LINE__<<m_imgDir;
         return Dir.exists();     //若路径已经存在则会返回false
@@ -214,17 +214,12 @@ bool Widget::readImgPath()
 
 void Widget::loadThumbnail()
 {
+    m_listWidget->clear();  //先清空再加载
+
     if(!readImgPath())  //读取图片失败
     {
         return;
     }
-
-//    if(m_listWidget != nullptr)
-//    {
-//        qDebug()<<__LINE__<<"UNNULL";
-//        m_listWidget->clear();
-//        delete m_listWidget;
-//    }
 
     /*创建单元项*/
     const QSize IMAGE_SIZE(this->width()/3-30, this->width()/3-30);
@@ -237,6 +232,32 @@ void Widget::loadThumbnail()
     }
 }
 
+void Widget::displayImg(QListWidgetItem *item)
+{
+    m_showWidget = new QLabel(this);
+//  m_showWidget->setPixmap(m_pixmap.scaled(m_imgLabel->width(),m_imgLabel->height(),Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_showWidget->setPixmap(QPixmap(m_imgDir + "\\" + m_imgList.at(m_listWidget->row(item))));
+//    m_showWidget.showMaximized();
+    m_showWidget->show();
+}
 
+void Widget::removeImg()
+{
+    /*删除缩略图*/
+    QListWidgetItem *item = m_listWidget->currentItem();
+    m_listWidget->removeItemWidget(item);
+    /*删除文件*/
+    QFileInfo fileInfo(m_imgDir + "\\" + item->text());
+    if(fileInfo.isFile())
+    {
+        QFile::remove(m_imgDir + "\\" + item->text());
+    }
+    delete item;
+}
 
-
+void Widget::on_pushButton_clicked()
+{
+    QListWidgetItem *item = m_listWidget->currentItem();
+    m_listWidget->removeItemWidget(item);
+    delete item;
+}

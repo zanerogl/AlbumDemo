@@ -149,13 +149,26 @@ public:
      */
     void loadThumbnail();
 
+    /**
+     * @brief displayImg    展示图片
+     */
+    void displayImg(QListWidgetItem *item);
+
+    /**
+     * @brief removeImg     删除图片
+     */
+    void removeImg();
+
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::Widget *ui;
 
     QString m_imgDir;               //图片文件目录
     QStringList m_imgList;          // 文件目录下所有的图像文件名
     QListWidget *m_listWidget;      // 预览窗口
-    QLabel m_showWidget;            // 图像显示窗口
+    QLabel *m_showWidget;            // 图像显示窗口
 
     QSize m_imgSize, m_itemSize;    //图片尺寸和item尺寸
 

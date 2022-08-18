@@ -27,13 +27,13 @@ HEADERS += \
 FORMS += \
     widget.ui
 
-#INCLUDEPATH += D:\ProgramFiles\Qt\Qt5.14.2\Tools\build\install\include
-#LIBS += D:\ProgramFiles\Qt\Qt5.14.2\Tools\build\lib\libopencv_*.a
+INCLUDEPATH += D:\ProgramFiles\Qt\Qt5.14.2\Tools\build\install\include
+LIBS += D:\ProgramFiles\Qt\Qt5.14.2\Tools\build\lib\libopencv_*.a
 
-INCLUDEPATH += /usr/local/include \
-                /usr/local/include/opencv
-                /usr/local/include/opencv2
-LIBS += /usr/local/lib/libopencv_* \
+#INCLUDEPATH += /usr/local/include \
+#                /usr/local/include/opencv
+#                /usr/local/include/opencv2
+#LIBS += /usr/local/lib/libopencv_* \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
